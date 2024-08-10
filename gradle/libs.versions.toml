@@ -15,8 +15,9 @@ composeBom = "2024.06.00"
 constraintlayoutCompose = "1.0.1"
 accompanistSystemUiController = "0.35.1-alpha"
 room = "2.6.1"
+navigation = "2.7.7"
 lifecycleRuntimeComposeAndroid = "2.8.4"
-mockk = "1.13.11"
+mockk = "1.13.12"
 mockk-android = "1.13.2"
 androidx-core-testing = "2.2.0"
 mockito-core = "5.0.0"
@@ -56,6 +57,7 @@ mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", versio
 coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines"}
 coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines"}
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines"}
+navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation"}
 
 [bundles]
 room = ["room-ktx", "room-runtime"]
