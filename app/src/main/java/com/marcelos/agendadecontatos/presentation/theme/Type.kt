@@ -15,3 +15,14 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     )
 )
+
+val TypographyTitle = Typography(
+    titleLarge = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 18.sp,
+        color = White,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    )
+)
