@@ -12,7 +12,20 @@
     <string name="option_camera">Câmera</string>
     <string name="option_gallery">Galeria</string>
     <string name="filter_gallery">image/*</string>
-    <string name="teste">Câmera</string>
-    <string name="postive_btn_text_success_dialog">Ok</string>
-    <string name="negative_btn_text_success_dialog">Cancelar</string>
+    <string name="message_warning_permission_camera">Para o app funcionar corretamente precisamos da permissão para usar a câmera.</string>
+    <string name="message_warning_permission_gallery">Para o app funcionar corretamente precisamos da permissão para usar a galeria.</string>
+    <string name="message_denied_permission_camera">
+        Como a permissão para usar a câmera foi negada.\nPara o app funcionar corretamente,
+    você precisa ativar a permissão manualmente nas configurações do app.
+    </string>
+    <string name="message_denied_permission_gallery">
+        Como a permissão para usar a galeria foi negada.\nPara o app funcionar corretamente,
+        você precisa ativar a permissão manualmente nas configurações do app.
+    </string>
+    <string name="txt_btn_positive_permission_dialog">Conceder permissão</string>
+    <string name="txt_btn_positive_permission_denied_dialog">Abrir configurações</string>
+    <string name="txt_btn_negative_permission_dialog">Cancelar</string>
+    <string name="title_permission_warning_dialog">Permissão necessária</string>
+    <string name="title_permission_denied_dialog">Permissão negada</string>
+    <string name="filter_contains_camera">câmera</string>
 </resources>
