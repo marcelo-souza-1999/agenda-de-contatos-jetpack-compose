@@ -47,11 +47,11 @@ import com.patrik.fancycomposedialogs.properties.DialogButtonProperties
 import kotlinx.coroutines.launch
 
 @Composable
-fun ImagePicker() {
+fun ImagePicker(
+    selectedImage: ImageBitmap? = null,
+    onImageSelected: (ImageBitmap?) -> Unit
+) {
     val context = LocalContext.current
-    val activity = context as ComponentActivity
-
-    var selectedImage by remember { mutableStateOf<ImageBitmap?>(null) }
     var expanded by remember { mutableStateOf(false) }
     var rationaleMessage by remember { mutableStateOf("") }
     var showPermissionWarningDialog by remember { mutableStateOf(false) }
@@ -62,17 +62,20 @@ fun ImagePicker() {
         contract = ActivityResultContracts.GetContent()
     ) { uri ->
         uri?.let {
+            val activity = context as ComponentActivity
             activity.lifecycleScope.launch {
-                selectedImage = ImageProcessing.decodeImageFromUri(activity, it)
+                onImageSelected(ImageProcessing.decodeImageFromUri(activity, it))
             }
         }
     }
+
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicturePreview()
     ) { bitmap ->
         bitmap?.let {
+            val activity = context as ComponentActivity
             activity.lifecycleScope.launch {
-                selectedImage = ImageProcessing.correctImageRotation(it).asImageBitmap()
+                onImageSelected(ImageProcessing.correctImageRotation(it).asImageBitmap())
             }
         }
     }
@@ -112,7 +115,8 @@ fun ImagePicker() {
                 ) showPermissionDeniedDialog = true
             })
 
-    ImagePickerColumn(selectedImage = selectedImage,
+    ImagePickerColumn(
+        selectedImage = selectedImage,
         expanded = expanded,
         onImageClick = { expanded = true },
         onDismissMenu = { expanded = false },

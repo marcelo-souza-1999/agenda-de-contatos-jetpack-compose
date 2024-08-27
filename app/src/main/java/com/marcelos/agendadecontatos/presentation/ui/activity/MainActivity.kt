@@ -20,7 +20,7 @@ import com.marcelos.agendadecontatos.presentation.theme.Purple700
 import com.marcelos.agendadecontatos.presentation.ui.navigation.Screen
 import com.marcelos.agendadecontatos.presentation.ui.screens.SaveContactScreen
 import com.marcelos.agendadecontatos.presentation.ui.screens.ShowContacts
-import com.marcelos.agendadecontatos.presentation.ui.screens.UpdateContact
+import com.marcelos.agendadecontatos.presentation.ui.screens.UpdateContactScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,7 +83,7 @@ private fun SetupNavigation() {
             SaveContactScreen(navController)
         }
         composable(route = Screen.UpdateContact.route) {
-            UpdateContact(navController)
+            UpdateContactScreen(navController)
         }
     }
 }

@@ -13,20 +13,29 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.marcelos.agendadecontatos.R
 import com.marcelos.agendadecontatos.presentation.theme.Purple500
+import com.marcelos.agendadecontatos.presentation.theme.Red
 
 @Composable
 fun CustomOutlinedTextField(
+    modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
-    keyboardType: KeyboardType = KeyboardType.Text,
-    modifier: Modifier = Modifier
+    isError: Boolean = false,
+    errorMessage: String? = null,
+    keyboardType: KeyboardType = KeyboardType.Text
 ) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         label = { Text(text = label) },
         maxLines = 1,
+        isError = isError,
+        supportingText = {
+            if (isError) {
+                Text(text = errorMessage ?: "", color = Red)
+            }
+        },
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         colors = OutlinedTextFieldDefaults.colors(
             cursorColor = Purple500,
