@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,7 +40,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.marcelos.agendadecontatos.R
-import com.marcelos.agendadecontatos.presentation.theme.Purple500
 import com.marcelos.agendadecontatos.presentation.theme.White
 import com.marcelos.agendadecontatos.utils.ImageProcessing
 import com.marcelos.agendadecontatos.utils.PermissionsHandler.requestPermissionForOption
@@ -48,8 +48,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ImagePicker(
-    selectedImage: ImageBitmap? = null,
-    onImageSelected: (ImageBitmap?) -> Unit
+    selectedImage: ImageBitmap? = null, onImageSelected: (ImageBitmap?) -> Unit
 ) {
     val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
@@ -80,43 +79,36 @@ fun ImagePicker(
         }
     }
 
-    val cameraPermissionLauncher =
-        createPermissionLauncher(
-            launcher = {
-                hasPermissionBeenDeniedBefore = false
-                cameraLauncher.launch()
-            },
-            onDenied = {
-                hasPermissionBeenDeniedBefore = true
-                if (!ActivityCompat.shouldShowRequestPermissionRationale(
-                        context as Activity, android.Manifest.permission.CAMERA
-                    )
-                ) {
-                    showPermissionDeniedDialog = true
+    val cameraPermissionLauncher = createPermissionLauncher(launcher = {
+        hasPermissionBeenDeniedBefore = false
+        cameraLauncher.launch()
+    }, onDenied = {
+        hasPermissionBeenDeniedBefore = true
+        if (!ActivityCompat.shouldShowRequestPermissionRationale(
+                context as Activity, android.Manifest.permission.CAMERA
+            )
+        ) {
+            showPermissionDeniedDialog = true
+        }
+    })
+
+    val galleryPermissionLauncher = createPermissionLauncher(launcher = {
+        hasPermissionBeenDeniedBefore = false
+        galleryLauncher.launch(context.getString(R.string.filter_gallery))
+    }, onDenied = {
+        hasPermissionBeenDeniedBefore = true
+        if (!ActivityCompat.shouldShowRequestPermissionRationale(
+                context as Activity,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    android.Manifest.permission.READ_MEDIA_IMAGES
+                } else {
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE
                 }
-            })
+            )
+        ) showPermissionDeniedDialog = true
+    })
 
-    val galleryPermissionLauncher =
-        createPermissionLauncher(
-            launcher = {
-                hasPermissionBeenDeniedBefore = false
-                galleryLauncher.launch(context.getString(R.string.filter_gallery))
-            },
-            onDenied = {
-                hasPermissionBeenDeniedBefore = true
-                if (!ActivityCompat.shouldShowRequestPermissionRationale(
-                        context as Activity,
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                            android.Manifest.permission.READ_MEDIA_IMAGES
-                        } else {
-                            android.Manifest.permission.READ_EXTERNAL_STORAGE
-                        }
-                    )
-                ) showPermissionDeniedDialog = true
-            })
-
-    ImagePickerColumn(
-        selectedImage = selectedImage,
+    ImagePickerColumn(selectedImage = selectedImage,
         expanded = expanded,
         onImageClick = { expanded = true },
         onDismissMenu = { expanded = false },
@@ -126,8 +118,7 @@ fun ImagePicker(
                 cameraPermissionLauncher = cameraPermissionLauncher,
                 galleryPermissionLauncher = galleryPermissionLauncher,
                 onPermissionRationaleNeeded = {
-                    rationaleMessage =
-                        context.getString(R.string.message_warning_permission_camera)
+                    rationaleMessage = context.getString(R.string.message_warning_permission_camera)
                     showPermissionWarningDialog = true
                 })
             expanded = false
@@ -152,7 +143,7 @@ fun ImagePicker(
             dialogButtonProperties = DialogButtonProperties(
                 positiveButtonText = R.string.txt_btn_positive_permission_dialog,
                 negativeButtonText = R.string.txt_btn_negative_permission_dialog,
-                buttonColor = Purple500,
+                buttonColor = MaterialTheme.colorScheme.primary,
                 buttonTextColor = White
             ),
             onConfirmClick = {
@@ -179,8 +170,7 @@ fun ImagePicker(
     if (showPermissionDeniedDialog && hasPermissionBeenDeniedBefore) {
         WarningDialog(title = stringResource(id = R.string.title_permission_denied_dialog),
             message = if (rationaleMessage.contains(
-                    other = context.getString(R.string.filter_contains_camera),
-                    ignoreCase = true
+                    other = context.getString(R.string.filter_contains_camera), ignoreCase = true
                 )
             ) {
                 stringResource(id = R.string.message_denied_permission_camera)
@@ -191,12 +181,12 @@ fun ImagePicker(
             dialogButtonProperties = DialogButtonProperties(
                 positiveButtonText = R.string.txt_btn_positive_permission_denied_dialog,
                 negativeButtonText = R.string.txt_btn_negative_permission_dialog,
-                buttonColor = Purple500,
+                buttonColor = MaterialTheme.colorScheme.primary,
                 buttonTextColor = White
             ),
             onConfirmClick = {
                 showPermissionDeniedDialog = false
-                openScreenAppSettings(context = context)
+                context.openScreenAppSettings()
             },
             onDismissClick = { showPermissionDeniedDialog = false })
     }
@@ -262,11 +252,11 @@ private fun createPermissionLauncher(
     if (isGranted) launcher() else onDenied()
 }
 
-private fun openScreenAppSettings(context: Context) {
+private fun Context.openScreenAppSettings() {
     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-        data = Uri.parse("package:${context.packageName}")
+        data = Uri.parse("package:$packageName")
     }
-    ContextCompat.startActivity(context, intent, null)
+    ContextCompat.startActivity(this, intent, null)
 }
 
 @Preview(showBackground = true, showSystemUi = false)

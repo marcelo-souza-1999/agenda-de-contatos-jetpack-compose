@@ -3,6 +3,7 @@ package com.marcelos.agendadecontatos.presentation.components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -12,13 +13,13 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.marcelos.agendadecontatos.R
-import com.marcelos.agendadecontatos.presentation.theme.Purple500
+import com.marcelos.agendadecontatos.presentation.theme.ContactsAgendaTheme
 import com.marcelos.agendadecontatos.presentation.theme.TypographyTitle
 import com.marcelos.agendadecontatos.presentation.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShowTopAppBar(
+fun TopAppBar(
     title: String = ""
 ) {
     TopAppBar(
@@ -33,7 +34,7 @@ fun ShowTopAppBar(
         },
         modifier = Modifier.testTag("topAppBarComponent"),
         colors = TopAppBarDefaults.largeTopAppBarColors(
-            containerColor = Purple500,
+            containerColor = MaterialTheme.colorScheme.primary,
             titleContentColor = White
         )
     )
@@ -42,5 +43,7 @@ fun ShowTopAppBar(
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
 private fun PreviewTopAppBar() {
-    ShowTopAppBar("Agenda de Contatos")
+    ContactsAgendaTheme {
+        TopAppBar("Agenda de Contatos")
+    }
 }

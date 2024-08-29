@@ -31,6 +31,15 @@ android {
             )
         }
     }
+    android.applicationVariants.configureEach {
+        val variantName = name
+
+        kotlin.sourceSets {
+            getByName(variantName) {
+                kotlin.srcDir("build/generated/ksp/$variantName/kotlin")
+            }
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
@@ -43,7 +52,9 @@ android {
     }
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += setOf(
+                "/META-INF/{AL2.0,LGPL2.1,LICENSE.md,LICENSE.txt,LICENSE-notice.md,LICENSE-notice.txt}"
+            )
         }
     }
     testOptions {
@@ -69,10 +80,11 @@ dependencies {
     implementation(libs.androidx.exifinterface)
     ksp(libs.room.compiler)
     implementation(libs.bundles.room)
-    ksp(libs.koin.ksp.compiler)
     implementation(libs.bundles.koin)
+    ksp(libs.koin.ksp.compiler)
     implementation(libs.bundles.coroutines)
     implementation(libs.navigation.compose)
+    implementation(libs.lifecycle.viewmodel)
     implementation(libs.fancy.compose.alert.dialog)
 
     testImplementation(libs.junit)

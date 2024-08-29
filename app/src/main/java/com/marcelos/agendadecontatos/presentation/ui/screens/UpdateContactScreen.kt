@@ -8,16 +8,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -25,31 +23,40 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.marcelos.agendadecontatos.R
-import com.marcelos.agendadecontatos.presentation.components.CustomOutlinedTextField
+import com.marcelos.agendadecontatos.presentation.components.FormOutlinedTextField
 import com.marcelos.agendadecontatos.presentation.components.ImagePicker
-import com.marcelos.agendadecontatos.presentation.components.ShowButton
-import com.marcelos.agendadecontatos.presentation.components.ShowTopAppBar
+import com.marcelos.agendadecontatos.presentation.components.PrimaryButton
+import com.marcelos.agendadecontatos.presentation.components.TopAppBar
 import com.marcelos.agendadecontatos.presentation.extensions.ageMask
 import com.marcelos.agendadecontatos.presentation.extensions.phoneMask
+import com.marcelos.agendadecontatos.presentation.theme.ContactsAgendaTheme
+import com.marcelos.agendadecontatos.presentation.viewmodel.ContactViewModel
+import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.context.startKoin
+import org.koin.ksp.generated.defaultModule
 
 @Composable
-fun UpdateContactScreen(navController: NavController) {
-    var image by remember { mutableStateOf<ImageBitmap?>(null) }
-    var name by rememberSaveable { mutableStateOf("") }
-    var surname by rememberSaveable { mutableStateOf("") }
-    var age by rememberSaveable { mutableStateOf("") }
-    var phone by rememberSaveable { mutableStateOf("") }
+fun UpdateContactScreen(
+    navController: NavController,
+    viewModel: ContactViewModel = koinViewModel()
+) {
+    val image by viewModel.image.collectAsState()
+    val name by viewModel.name.collectAsState()
+    val surname by viewModel.surname.collectAsState()
+    val age by viewModel.age.collectAsState()
+    val phone by viewModel.phone.collectAsState()
 
-    var nameError by rememberSaveable { mutableStateOf(false) }
-    var surnameError by rememberSaveable { mutableStateOf(false) }
-    var ageError by rememberSaveable { mutableStateOf(false) }
-    var phoneError by rememberSaveable { mutableStateOf(false) }
+    val nameError by viewModel.nameError.collectAsState()
+    val surnameError by viewModel.surnameError.collectAsState()
+    val ageError by viewModel.ageError.collectAsState()
+    val phoneError by viewModel.phoneError.collectAsState()
 
     val scrollState = rememberScrollState()
 
     Scaffold(
         topBar = {
-            ShowTopAppBar(
+            TopAppBar(
                 title = stringResource(R.string.title_update_contacts_top_app_bar)
             )
         }
@@ -62,65 +69,51 @@ fun UpdateContactScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.size_20)))
+
             ImagePicker(
                 selectedImage = image,
-                onImageSelected = { image = it }
+                onImageSelected = { viewModel.updateImage(it) }
             )
 
-            CustomOutlinedTextField(
+            FormOutlinedTextField(
                 value = name,
-                onValueChange = {
-                    name = it
-                    nameError = false
-                },
+                onValueChange = { viewModel.updateName(it) },
                 isError = nameError,
                 errorMessage = stringResource(R.string.error_message_required_field),
                 label = stringResource(R.string.text_label_name),
                 modifier = Modifier.padding(top = dimensionResource(id = R.dimen.size_50))
             )
-            CustomOutlinedTextField(
+            FormOutlinedTextField(
                 value = surname,
-                onValueChange = {
-                    surname = it
-                    surnameError = false
-                },
+                onValueChange = { viewModel.updateSurname(it) },
                 isError = surnameError,
                 errorMessage = stringResource(R.string.error_message_required_field),
                 label = stringResource(R.string.text_label_surname)
             )
-            CustomOutlinedTextField(
+            FormOutlinedTextField(
                 value = age,
-                onValueChange = {
-                    age = ageMask(it)
-                    ageError = false
-                },
+                onValueChange = { viewModel.updateAge(it.ageMask()) },
                 isError = ageError,
                 errorMessage = stringResource(R.string.error_message_required_field),
                 label = stringResource(R.string.text_label_age),
                 keyboardType = KeyboardType.Number
             )
-            CustomOutlinedTextField(
+            FormOutlinedTextField(
                 value = phone,
-                onValueChange = {
-                    phone = phoneMask(it)
-                    phoneError = false
-                },
+                onValueChange = { viewModel.updatePhone(it.phoneMask()) },
                 isError = phoneError,
                 errorMessage = stringResource(R.string.error_message_required_field),
                 label = stringResource(R.string.text_label_phone),
                 keyboardType = KeyboardType.Phone
             )
-            ShowButton(
-                onClickBtn = {
-                    if (validateFields(name, surname, age, phone,
-                            onNameErrorChange = { nameError = it },
-                            onSurnameErrorChange = { surnameError = it },
-                            onAgeErrorChange = { ageError = it },
-                            onPhoneErrorChange = { phoneError = it })
-                    ) {
 
+            PrimaryButton(
+                onClickBtn = {
+                    if (viewModel.validateFields()) {
+                        // Aqui você pode adicionar a lógica de atualização do contato
                     }
                 },
+                backgroundColor = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(dimensionResource(id = R.dimen.size_20)),
@@ -130,31 +123,15 @@ fun UpdateContactScreen(navController: NavController) {
     }
 }
 
-private fun validateFields(
-    name: String,
-    surname: String,
-    age: String,
-    phone: String,
-    onNameErrorChange: (Boolean) -> Unit,
-    onSurnameErrorChange: (Boolean) -> Unit,
-    onAgeErrorChange: (Boolean) -> Unit,
-    onPhoneErrorChange: (Boolean) -> Unit
-): Boolean {
-    val nameError = name.isEmpty()
-    val surnameError = surname.isEmpty()
-    val ageError = age.isEmpty()
-    val phoneError = phone.isEmpty()
-
-    onNameErrorChange(nameError)
-    onSurnameErrorChange(surnameError)
-    onAgeErrorChange(ageError)
-    onPhoneErrorChange(phoneError)
-
-    return !nameError && !surnameError && !ageError && !phoneError
-}
-
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
-private fun PreviewSaveContacts() {
-    UpdateContactScreen(navController = rememberNavController())
+private fun PreviewUpdateContacts() {
+    ContactsAgendaTheme {
+        val context = LocalContext.current
+        startKoin {
+            androidContext(context)
+            modules(defaultModule)
+        }
+        UpdateContactScreen(navController = rememberNavController())
+    }
 }
