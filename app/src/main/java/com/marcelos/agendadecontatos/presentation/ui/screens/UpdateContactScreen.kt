@@ -15,6 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -70,41 +71,21 @@ fun UpdateContactScreen(
         ) {
             Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.size_20)))
 
-            ImagePicker(
-                selectedImage = image,
-                onImageSelected = { viewModel.updateImage(it) }
-            )
+            ContactImageSection(image = image, onImageSelected = viewModel::updateImage)
 
-            FormOutlinedTextField(
-                value = name,
-                onValueChange = { viewModel.updateName(it) },
-                isError = nameError,
-                errorMessage = stringResource(R.string.error_message_required_field),
-                label = stringResource(R.string.text_label_name),
-                modifier = Modifier.padding(top = dimensionResource(id = R.dimen.size_50))
-            )
-            FormOutlinedTextField(
-                value = surname,
-                onValueChange = { viewModel.updateSurname(it) },
-                isError = surnameError,
-                errorMessage = stringResource(R.string.error_message_required_field),
-                label = stringResource(R.string.text_label_surname)
-            )
-            FormOutlinedTextField(
-                value = age,
-                onValueChange = { viewModel.updateAge(it.ageMask()) },
-                isError = ageError,
-                errorMessage = stringResource(R.string.error_message_required_field),
-                label = stringResource(R.string.text_label_age),
-                keyboardType = KeyboardType.Number
-            )
-            FormOutlinedTextField(
-                value = phone,
-                onValueChange = { viewModel.updatePhone(it.phoneMask()) },
-                isError = phoneError,
-                errorMessage = stringResource(R.string.error_message_required_field),
-                label = stringResource(R.string.text_label_phone),
-                keyboardType = KeyboardType.Phone
+            ContactFormFields(
+                name = name,
+                surname = surname,
+                age = age,
+                phone = phone,
+                nameError = nameError,
+                surnameError = surnameError,
+                ageError = ageError,
+                phoneError = phoneError,
+                onNameChange = viewModel::updateName,
+                onSurnameChange = viewModel::updateSurname,
+                onAgeChange = { viewModel.updateAge(it.ageMask()) },
+                onPhoneChange = { viewModel.updatePhone(it.phoneMask()) }
             )
 
             PrimaryButton(
@@ -123,9 +104,69 @@ fun UpdateContactScreen(
     }
 }
 
+@Composable
+private fun ContactImageSection(
+    image: ImageBitmap?,
+    onImageSelected: (ImageBitmap?) -> Unit
+) {
+    ImagePicker(
+        selectedImage = image,
+        onImageSelected = onImageSelected
+    )
+}
+
+@Composable
+private fun ContactFormFields(
+    name: String,
+    surname: String,
+    age: String,
+    phone: String,
+    nameError: Boolean,
+    surnameError: Boolean,
+    ageError: Boolean,
+    phoneError: Boolean,
+    onNameChange: (String) -> Unit,
+    onSurnameChange: (String) -> Unit,
+    onAgeChange: (String) -> Unit,
+    onPhoneChange: (String) -> Unit
+) {
+    FormOutlinedTextField(
+        value = name,
+        onValueChange = onNameChange,
+        isError = nameError,
+        errorMessage = stringResource(R.string.error_message_required_field),
+        label = stringResource(R.string.text_label_name),
+        modifier = Modifier.padding(top = dimensionResource(id = R.dimen.size_50))
+    )
+    FormOutlinedTextField(
+        value = surname,
+        onValueChange = onSurnameChange,
+        isError = surnameError,
+        errorMessage = stringResource(R.string.error_message_required_field),
+        label = stringResource(R.string.text_label_surname)
+    )
+    FormOutlinedTextField(
+        value = age,
+        onValueChange = onAgeChange,
+        isError = ageError,
+        errorMessage = stringResource(R.string.error_message_required_field),
+        label = stringResource(R.string.text_label_age),
+        keyboardType = KeyboardType.Number
+    )
+    FormOutlinedTextField(
+        value = phone,
+        onValueChange = onPhoneChange,
+        isError = phoneError,
+        errorMessage = stringResource(R.string.error_message_required_field),
+        label = stringResource(R.string.text_label_phone),
+        keyboardType = KeyboardType.Phone
+    )
+}
+
+
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
-private fun PreviewUpdateContacts() {
+internal fun PreviewUpdateContacts() {
     ContactsAgendaTheme {
         val context = LocalContext.current
         startKoin {

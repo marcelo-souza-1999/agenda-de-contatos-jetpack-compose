@@ -17,7 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.marcelos.agendadecontatos.R
 import com.marcelos.agendadecontatos.presentation.theme.ContactsAgendaTheme
 import com.marcelos.agendadecontatos.presentation.theme.Purple700
-import com.marcelos.agendadecontatos.presentation.ui.navigation.Screen
+import com.marcelos.agendadecontatos.presentation.ui.navigation.Routes
 import com.marcelos.agendadecontatos.presentation.ui.screens.SaveContactScreen
 import com.marcelos.agendadecontatos.presentation.ui.screens.ShowContacts
 import com.marcelos.agendadecontatos.presentation.ui.screens.UpdateContactScreen
@@ -50,7 +50,7 @@ private fun SetupNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.ShowContacts.route,
+        startDestination = Routes.ShowContacts.route,
         enterTransition = {
             slideInHorizontally(
                 initialOffsetX = { fullWidth -> fullWidth },
@@ -76,13 +76,13 @@ private fun SetupNavigation() {
             )
         }
     ) {
-        composable(route = Screen.ShowContacts.route) {
+        composable(route = Routes.ShowContacts.route) {
             ShowContacts(navController)
         }
-        composable(route = Screen.SaveContact.route) {
+        composable(route = Routes.SaveContact.route) {
             SaveContactScreen(navController)
         }
-        composable(route = Screen.UpdateContact.route) {
+        composable(route = Routes.UpdateContact.route) {
             UpdateContactScreen(navController)
         }
     }

@@ -3,6 +3,11 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.google.ksp)
+    alias(libs.plugins.detekt)
+}
+
+apply {
+    from("../config/detekt/detekt.gradle")
 }
 
 android {
@@ -61,6 +66,12 @@ android {
         unitTests.all {
             it.allJvmArgs = (it.allJvmArgs + "-Dnet.bytebuddy.experimental=true").toList()
         }
+    }
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    reports {
+        txt.required.set(true)
     }
 }
 

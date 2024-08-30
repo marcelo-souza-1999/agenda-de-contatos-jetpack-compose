@@ -42,7 +42,7 @@ fun TopAppBar(
 
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
-private fun PreviewTopAppBar() {
+internal fun PreviewTopAppBar() {
     ContactsAgendaTheme {
         TopAppBar("Agenda de Contatos")
     }

@@ -37,7 +37,7 @@ fun WarningDialog(
 
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
-private fun PreviewWarningDialog() {
+internal fun PreviewWarningDialog() {
     ContactsAgendaTheme {
         WarningDialog(
             title = stringResource(R.string.title_permission_warning_dialog),

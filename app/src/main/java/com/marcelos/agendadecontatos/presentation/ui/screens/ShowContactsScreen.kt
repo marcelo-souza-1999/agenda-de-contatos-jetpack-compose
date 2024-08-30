@@ -14,7 +14,7 @@ import com.marcelos.agendadecontatos.R
 import com.marcelos.agendadecontatos.presentation.components.ActionFloatingButton
 import com.marcelos.agendadecontatos.presentation.components.TopAppBar
 import com.marcelos.agendadecontatos.presentation.theme.ContactsAgendaTheme
-import com.marcelos.agendadecontatos.presentation.ui.navigation.Screen
+import com.marcelos.agendadecontatos.presentation.ui.navigation.Routes
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -32,7 +32,7 @@ fun ShowContacts(navController: NavController) {
                 backgroundColor = MaterialTheme.colorScheme.primary,
                 onClick = {
                     navController.navigate(
-                        route = Screen.SaveContact.route
+                        route = Routes.SaveContact.route
                     )
                 }
             )
@@ -44,7 +44,7 @@ fun ShowContacts(navController: NavController) {
 
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
-private fun PreviewShowContacts() {
+internal fun PreviewShowContacts() {
     ContactsAgendaTheme {
         ShowContacts(navController = rememberNavController())
     }

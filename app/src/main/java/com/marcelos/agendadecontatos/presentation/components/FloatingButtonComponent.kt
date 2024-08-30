@@ -49,7 +49,7 @@ fun ActionFloatingButton(
 
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
-private fun PreviewFloatingActionButton() {
+internal fun PreviewFloatingActionButton() {
     ContactsAgendaTheme {
         ActionFloatingButton(
             onClick = {

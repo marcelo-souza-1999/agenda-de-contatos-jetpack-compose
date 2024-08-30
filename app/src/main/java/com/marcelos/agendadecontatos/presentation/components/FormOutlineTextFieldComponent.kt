@@ -56,7 +56,7 @@ fun FormOutlinedTextField(
 
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
-private fun PreviewCustomOutlinedTextField() {
+internal fun PreviewCustomOutlinedTextField() {
     ContactsAgendaTheme {
         FormOutlinedTextField(
             value = "John Doe",

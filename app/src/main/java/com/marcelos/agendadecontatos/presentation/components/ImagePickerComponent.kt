@@ -46,6 +46,7 @@ import com.marcelos.agendadecontatos.utils.PermissionsHandler.requestPermissionF
 import com.patrik.fancycomposedialogs.properties.DialogButtonProperties
 import kotlinx.coroutines.launch
 
+@Suppress("LongMethod")
 @Composable
 fun ImagePicker(
     selectedImage: ImageBitmap? = null, onImageSelected: (ImageBitmap?) -> Unit
@@ -261,7 +262,7 @@ private fun Context.openScreenAppSettings() {
 
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
-private fun PreviewImagePicker() {
+internal fun PreviewImagePicker() {
     Image(
         painter = painterResource(R.drawable.ic_add_photo),
         contentDescription = null,
