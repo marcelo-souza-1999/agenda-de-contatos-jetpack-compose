@@ -25,9 +25,16 @@
         você precisa ativar a permissão manualmente nas configurações do app.
     </string>
     <string name="txt_btn_positive_permission_dialog">Conceder permissão</string>
+    <string name="txt_btn_positive_save_contact_success_dialog">OK</string>
     <string name="txt_btn_positive_permission_denied_dialog">Abrir configurações</string>
     <string name="txt_btn_negative_permission_dialog">Cancelar</string>
+    <string name="txt_btn_negative_error_dialog">Cancelar</string>
+    <string name="txt_btn_positive_error_dialog">Tentar novamente</string>
     <string name="title_permission_warning_dialog">Permissão necessária</string>
+    <string name="title_save_contact_success_dialog">Contato salvo</string>
+    <string name="title_save_contact_error_dialog">Salvar contato</string>
+    <string name="message_save_contact_success_dialog">Contato foi salvo com sucesso!</string>
+    <string name="message_save_contact_error_dialog">Ocorreu um erro ao tentar salvar o contato!</string>
     <string name="title_permission_denied_dialog">Permissão negada</string>
     <string name="filter_contains_camera">câmera</string>
     <string name="error_message_required_field">Campo obrigatório</string>

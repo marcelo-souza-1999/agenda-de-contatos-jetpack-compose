@@ -1,10 +1,12 @@
-package com.marcelos.agendadecontatos.di
+package com.marcelos.agendadecontatos.di.initialization
 
 import android.app.Application
+import com.marcelos.agendadecontatos.di.modules.DatabaseModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.ksp.generated.defaultModule
+import org.koin.ksp.generated.module
 
 class InitializeKoinApplication : Application() {
 
@@ -15,7 +17,8 @@ class InitializeKoinApplication : Application() {
             androidLogger()
             androidContext(this@InitializeKoinApplication)
             modules(
-                defaultModule
+                defaultModule,
+                DatabaseModule().module
             )
         }
     }

@@ -3,13 +3,21 @@ package com.marcelos.agendadecontatos.presentation.viewmodel
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.marcelos.agendadecontatos.domain.model.ContactViewData
+import com.marcelos.agendadecontatos.domain.usecase.SaveContactUseCase
+import com.marcelos.agendadecontatos.presentation.viewmodel.viewstate.State
+import com.marcelos.agendadecontatos.utils.toByteArray
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
-class ContactViewModel : ViewModel() {
+class SaveContactViewModel(
+    private val saveContactUseCase: SaveContactUseCase
+) : ViewModel() {
 
     private val _image = MutableStateFlow<ImageBitmap?>(null)
     val image = _image.asStateFlow()
@@ -37,6 +45,32 @@ class ContactViewModel : ViewModel() {
 
     private val _phoneError = MutableStateFlow(false)
     val phoneError = _phoneError.asStateFlow()
+
+    private val _viewStateSaveContact =
+        MutableStateFlow<State<ContactViewData>>(State.Loading())
+    val viewStateSaveContact = _viewStateSaveContact.asStateFlow()
+
+    fun saveContact(
+        image: ImageBitmap?,
+        name: String,
+        surname: String,
+        age: Int,
+        phone: String
+    ) = viewModelScope.launch {
+        saveContactUseCase(
+            image = image.toByteArray(),
+            name = name,
+            surname = surname,
+            age = age,
+            phone = phone
+        ).onStart {
+            _viewStateSaveContact.value = State.Loading()
+        }.catch { throwable ->
+            _viewStateSaveContact.value = State.Error(throwable)
+        }.collect { result ->
+            _viewStateSaveContact.value = result
+        }
+    }
 
     fun updateImage(newImage: ImageBitmap?) = viewModelScope.launch {
         _image.value = newImage

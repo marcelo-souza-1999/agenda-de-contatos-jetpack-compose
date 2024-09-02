@@ -11,6 +11,7 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.integerResource
+import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -30,6 +31,7 @@ class MainActivity : ComponentActivity() {
                 scrim = Purple700.toArgb()
             )
         )
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             ContactsAgendaApp()
         }

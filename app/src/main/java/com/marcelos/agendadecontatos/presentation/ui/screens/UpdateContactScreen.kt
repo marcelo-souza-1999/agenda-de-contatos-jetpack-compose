@@ -31,7 +31,7 @@ import com.marcelos.agendadecontatos.presentation.components.TopAppBar
 import com.marcelos.agendadecontatos.presentation.extensions.ageMask
 import com.marcelos.agendadecontatos.presentation.extensions.phoneMask
 import com.marcelos.agendadecontatos.presentation.theme.ContactsAgendaTheme
-import com.marcelos.agendadecontatos.presentation.viewmodel.ContactViewModel
+import com.marcelos.agendadecontatos.presentation.viewmodel.SaveContactViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.context.startKoin
@@ -40,7 +40,7 @@ import org.koin.ksp.generated.defaultModule
 @Composable
 fun UpdateContactScreen(
     navController: NavController,
-    viewModel: ContactViewModel = koinViewModel()
+    viewModel: SaveContactViewModel = koinViewModel()
 ) {
     val image by viewModel.image.collectAsState()
     val name by viewModel.name.collectAsState()
