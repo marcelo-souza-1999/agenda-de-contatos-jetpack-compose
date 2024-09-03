@@ -69,9 +69,19 @@ android {
     }
 }
 
-tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+tasks.register<io.gitlab.arturbosch.detekt.Detekt>("detektAll") {
+    parallel = true
+    buildUponDefaultConfig = true
+    setSource(files(projectDir))
+    config.setFrom(file("$rootDir/config/detekt/detekt.yml"))
+    include("**/*.kt")
+    include("**/*.kts")
+    exclude("**/build/**")
     reports {
+        xml.required.set(false)
+        html.required.set(true)
         txt.required.set(true)
+        sarif.required.set(true)
     }
 }
 
