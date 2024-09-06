@@ -1,5 +1,8 @@
 package com.marcelos.agendadecontatos.presentation.ui.screens
 
+import android.content.Context
+import android.content.res.Configuration
+import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,13 +24,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.marcelos.agendadecontatos.R
 import com.marcelos.agendadecontatos.presentation.components.ErrorDialog
 import com.marcelos.agendadecontatos.presentation.components.FormOutlinedTextField
@@ -40,19 +43,20 @@ import com.marcelos.agendadecontatos.presentation.extensions.phoneMask
 import com.marcelos.agendadecontatos.presentation.theme.ContactsAgendaTheme
 import com.marcelos.agendadecontatos.presentation.theme.White
 import com.marcelos.agendadecontatos.presentation.ui.navigation.Routes
-import com.marcelos.agendadecontatos.presentation.viewmodel.SaveContactViewModel
+import com.marcelos.agendadecontatos.presentation.viewmodel.ContactsViewModel
 import com.marcelos.agendadecontatos.presentation.viewmodel.viewstate.State
+import com.marcelos.agendadecontatos.utils.Constants.EXTENSION_IMAGE
+import com.marcelos.agendadecontatos.utils.Constants.FILE_PATH_IMAGE_NAME
+import com.marcelos.agendadecontatos.utils.Constants.QUALITY_IMAGE
 import com.patrik.fancycomposedialogs.properties.DialogButtonProperties
-import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.compose.koinViewModel
-import org.koin.core.context.startKoin
-import org.koin.ksp.generated.defaultModule
+import java.io.File
 
 @Composable
 fun SaveContactScreen(
-    navController: NavController,
-    viewModel: SaveContactViewModel = koinViewModel()
+    navController: NavController, viewModel: ContactsViewModel = koinViewModel()
 ) {
+    val context: Context = LocalContext.current
     val image by viewModel.image.collectAsState()
     val name by viewModel.name.collectAsState()
     val surname by viewModel.surname.collectAsState()
@@ -69,27 +73,23 @@ fun SaveContactScreen(
 
     val scrollState = rememberScrollState()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = stringResource(R.string.title_save_contacts_top_app_bar)
-            )
-        }
-    ) { paddingValues ->
+    Scaffold(topBar = {
+        TopAppBar(
+            title = stringResource(R.string.title_save_contacts_top_app_bar)
+        )
+    }) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .verticalScroll(scrollState)
-                .imePadding(),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .imePadding(), horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.size_20)))
 
             ContactImageSection(image = image, onImageSelected = viewModel::updateImage)
 
-            ContactFormFields(
-                name = name,
+            ContactFormFields(name = name,
                 surname = surname,
                 age = age,
                 phone = phone,
@@ -100,11 +100,13 @@ fun SaveContactScreen(
                 onNameChange = viewModel::updateName,
                 onSurnameChange = viewModel::updateSurname,
                 onAgeChange = { viewModel.updateAge(it.ageMask()) },
-                onPhoneChange = { viewModel.updatePhone(it.phoneMask()) }
-            )
+                onPhoneChange = { viewModel.updatePhone(it.phoneMask()) })
 
             fun fetchSaveContact() = viewModel.saveContact(
-                image = image,
+                imagePath = getPathImage(
+                    context = context,
+                    imageBitmap = image
+                ),
                 name = name,
                 surname = surname,
                 age = age.toInt(),
@@ -129,34 +131,49 @@ fun SaveContactScreen(
                 else if (viewStateSaveContact is State.Error) showSaveContactErrorDialog = true
             }
 
-            HandleSaveContactDialogs(
-                showSaveContactSuccessDialog = showSaveContactSuccessDialog,
+            HandleSaveContactDialogs(showSaveContactSuccessDialog = showSaveContactSuccessDialog,
                 showSaveContactErrorDialog = showSaveContactErrorDialog,
-                onSuccessDismiss = {
+                onSuccess = {
                     showSaveContactSuccessDialog = false
                     navController.navigate(Routes.ShowContacts.route) {
                         popUpTo(Routes.SaveContact.route) { inclusive = true }
                         launchSingleTop = true
                     }
                 },
-                onErrorDismiss = {
+                onError = {
                     showSaveContactErrorDialog = false
                 },
                 onRetry = {
                     showSaveContactErrorDialog = false
                     fetchSaveContact()
-                }
-            )
+                })
         }
     }
+}
+
+private fun getPathImage(
+    context: Context, imageBitmap: ImageBitmap?
+): String? {
+    val bitmap = imageBitmap?.asAndroidBitmap()
+
+    val fileName = "${FILE_PATH_IMAGE_NAME}${System.currentTimeMillis()}$EXTENSION_IMAGE"
+    val file = File(context.filesDir, fileName)
+
+    file.outputStream().use { outputStream ->
+        bitmap?.compress(
+            Bitmap.CompressFormat.PNG, QUALITY_IMAGE, outputStream
+        )
+    }
+
+    return file.absolutePath
 }
 
 @Composable
 private fun HandleSaveContactDialogs(
     showSaveContactSuccessDialog: Boolean,
     showSaveContactErrorDialog: Boolean,
-    onSuccessDismiss: () -> Unit,
-    onErrorDismiss: () -> Unit,
+    onSuccess: () -> Unit,
+    onError: () -> Unit,
     onRetry: () -> Unit
 ) {
     if (showSaveContactSuccessDialog) {
@@ -169,8 +186,8 @@ private fun HandleSaveContactDialogs(
                 buttonColor = MaterialTheme.colorScheme.primary,
                 buttonTextColor = White
             ),
-            onConfirmClick = onSuccessDismiss,
-            onDismissClick = onSuccessDismiss
+            onConfirmClick = onSuccess,
+            onDismissClick = onSuccess
         )
     }
 
@@ -186,19 +203,17 @@ private fun HandleSaveContactDialogs(
                 buttonTextColor = White
             ),
             onConfirmClick = onRetry,
-            onDismissClick = onErrorDismiss
+            onDismissClick = onError
         )
     }
 }
 
 @Composable
 private fun ContactImageSection(
-    image: ImageBitmap?,
-    onImageSelected: (ImageBitmap?) -> Unit
+    image: ImageBitmap?, onImageSelected: (ImageBitmap?) -> Unit
 ) {
     ImagePicker(
-        selectedImage = image,
-        onImageSelected = onImageSelected
+        selectedImage = image, onImageSelected = onImageSelected
     )
 }
 
@@ -251,15 +266,62 @@ private fun ContactFormFields(
 }
 
 
-@Preview(showBackground = true, showSystemUi = false)
+@Preview(
+    showBackground = true, showSystemUi = false, uiMode = Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 internal fun PreviewSaveContacts() {
     ContactsAgendaTheme {
-        val context = LocalContext.current
-        startKoin {
-            androidContext(context)
-            modules(defaultModule)
+        val fakeImage: ImageBitmap? = null
+        val fakeName = "John"
+        val fakeSurname = "Doe"
+        val fakeAge = "30"
+        val fakePhone = "1234567890"
+        val fakeNameError = false
+        val fakeSurnameError = false
+        val fakeAgeError = false
+        val fakePhoneError = false
+
+        Scaffold(topBar = {
+            TopAppBar(
+                title = stringResource(R.string.title_save_contacts_top_app_bar)
+            )
+        }) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
+                    .imePadding(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.size_20)))
+
+                ContactImageSection(image = fakeImage, onImageSelected = {})
+
+                ContactFormFields(name = fakeName,
+                    surname = fakeSurname,
+                    age = fakeAge,
+                    phone = fakePhone,
+                    nameError = fakeNameError,
+                    surnameError = fakeSurnameError,
+                    ageError = fakeAgeError,
+                    phoneError = fakePhoneError,
+                    onNameChange = {},
+                    onSurnameChange = {},
+                    onAgeChange = {},
+                    onPhoneChange = {})
+
+                PrimaryButton(
+                    onClickBtn = {},
+                    backgroundColor = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(dimensionResource(id = R.dimen.size_20)),
+                    text = stringResource(R.string.text_btn_save)
+                )
+            }
         }
-        SaveContactScreen(navController = rememberNavController())
     }
 }
+

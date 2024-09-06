@@ -3,10 +3,10 @@ package com.marcelos.agendadecontatos.presentation.viewmodel
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.marcelos.agendadecontatos.domain.model.ContactViewData
+import com.marcelos.agendadecontatos.domain.model.ContactsViewData
+import com.marcelos.agendadecontatos.domain.usecase.GetContactsUseCase
 import com.marcelos.agendadecontatos.domain.usecase.SaveContactUseCase
 import com.marcelos.agendadecontatos.presentation.viewmodel.viewstate.State
-import com.marcelos.agendadecontatos.utils.toByteArray
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -15,8 +15,9 @@ import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
-class SaveContactViewModel(
-    private val saveContactUseCase: SaveContactUseCase
+class ContactsViewModel(
+    private val saveContactUseCase: SaveContactUseCase,
+    private val getContactUseCase: GetContactsUseCase
 ) : ViewModel() {
 
     private val _image = MutableStateFlow<ImageBitmap?>(null)
@@ -46,23 +47,28 @@ class SaveContactViewModel(
     private val _phoneError = MutableStateFlow(false)
     val phoneError = _phoneError.asStateFlow()
 
-    private val _viewStateSaveContact =
-        MutableStateFlow<State<ContactViewData>>(State.Loading())
+    private val _viewStateGetContacts =
+        MutableStateFlow<State<List<ContactsViewData>>>(State.Loading())
+    val viewStateGetContacts = _viewStateGetContacts.asStateFlow()
+
+    private val _viewStateSaveContact = MutableStateFlow<State<ContactsViewData>>(State.Loading())
     val viewStateSaveContact = _viewStateSaveContact.asStateFlow()
 
+    fun getContacts() = viewModelScope.launch {
+        getContactUseCase().onStart {
+            _viewStateGetContacts.value = State.Loading()
+        }.catch { throwable ->
+            _viewStateGetContacts.value = State.Error(throwable)
+        }.collect { result ->
+            _viewStateGetContacts.value = result
+        }
+    }
+
     fun saveContact(
-        image: ImageBitmap?,
-        name: String,
-        surname: String,
-        age: Int,
-        phone: String
+        imagePath: String?, name: String, surname: String, age: Int, phone: String
     ) = viewModelScope.launch {
         saveContactUseCase(
-            image = image.toByteArray(),
-            name = name,
-            surname = surname,
-            age = age,
-            phone = phone
+            imagePath = imagePath, name = name, surname = surname, age = age, phone = phone
         ).onStart {
             _viewStateSaveContact.value = State.Loading()
         }.catch { throwable ->
@@ -76,29 +82,25 @@ class SaveContactViewModel(
         _image.value = newImage
     }
 
-    fun updateName(newName: String) =
-        viewModelScope.launch {
-            _name.value = newName
-            _nameError.value = false
-        }
+    fun updateName(newName: String) = viewModelScope.launch {
+        _name.value = newName
+        _nameError.value = false
+    }
 
-    fun updateSurname(newSurname: String) =
-        viewModelScope.launch {
-            _surname.value = newSurname
-            _surnameError.value = false
-        }
+    fun updateSurname(newSurname: String) = viewModelScope.launch {
+        _surname.value = newSurname
+        _surnameError.value = false
+    }
 
-    fun updateAge(newAge: String) =
-        viewModelScope.launch {
-            _age.value = newAge
-            _ageError.value = false
-        }
+    fun updateAge(newAge: String) = viewModelScope.launch {
+        _age.value = newAge
+        _ageError.value = false
+    }
 
-    fun updatePhone(newPhone: String) =
-        viewModelScope.launch {
-            _phone.value = newPhone
-            _phoneError.value = false
-        }
+    fun updatePhone(newPhone: String) = viewModelScope.launch {
+        _phone.value = newPhone
+        _phoneError.value = false
+    }
 
     fun validateFields(): Boolean {
         val nameError = _name.value.isEmpty()

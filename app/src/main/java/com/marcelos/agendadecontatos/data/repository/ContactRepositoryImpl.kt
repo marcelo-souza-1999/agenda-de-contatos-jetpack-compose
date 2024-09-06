@@ -1,7 +1,7 @@
 package com.marcelos.agendadecontatos.data.repository
 
 import com.marcelos.agendadecontatos.domain.datasource.ContactDataSource
-import com.marcelos.agendadecontatos.domain.model.ContactViewData
+import com.marcelos.agendadecontatos.domain.model.ContactsViewData
 import com.marcelos.agendadecontatos.domain.repository.ContactRepository
 import org.koin.core.annotation.Single
 
@@ -12,7 +12,7 @@ class ContactRepositoryImpl(
 
     override suspend fun getContacts() = contactDataSource.getContacts()
 
-    override suspend fun insertContact(contacts: ContactViewData) =
+    override suspend fun insertContact(contacts: ContactsViewData) =
         contactDataSource.insertContacts(contacts)
 
     override suspend fun deleteContact(idContact: Int) = contactDataSource.deleteContact(idContact)

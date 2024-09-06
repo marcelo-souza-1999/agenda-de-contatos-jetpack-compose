@@ -1,10 +1,8 @@
 package com.marcelos.agendadecontatos.domain.model
 
-import java.util.UUID
-
-data class ContactViewData(
-    val id: UUID,
-    val image: ByteArray?,
+data class ContactsViewData(
+    val id: Int = 0,
+    val imagePath: String?,
     val name: String,
     val surname: String,
     val age: Int,

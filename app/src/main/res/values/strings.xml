@@ -38,4 +38,8 @@
     <string name="title_permission_denied_dialog">Permissão negada</string>
     <string name="filter_contains_camera">câmera</string>
     <string name="error_message_required_field">Campo obrigatório</string>
+    <string name="contact_name_format">Nome: %1$s %2$s</string>
+    <string name="contact_age_format">Idade: %1$d</string>
+    <string name="contact_phone_format">Número: %1$s</string>
+    <string name="no_contacts_found">Nenhum contato encontrado</string>
 </resources>

@@ -1,12 +1,12 @@
 package com.marcelos.agendadecontatos.utils
 
 import com.marcelos.agendadecontatos.data.entitys.ContactEntity
-import com.marcelos.agendadecontatos.domain.model.ContactViewData
+import com.marcelos.agendadecontatos.domain.model.ContactsViewData
 
 fun List<ContactEntity>.toContactViewData() = map {
-    ContactViewData(
+    ContactsViewData(
         id = it.id,
-        image = it.image,
+        imagePath = it.imagePath,
         name = it.name,
         surname = it.surname,
         age = it.age,
@@ -14,9 +14,9 @@ fun List<ContactEntity>.toContactViewData() = map {
     )
 }
 
-fun ContactViewData.toContactEntity() = ContactEntity(
+fun ContactsViewData.toContactEntity() = ContactEntity(
     id = id,
-    image = image,
+    imagePath = imagePath,
     name = name,
     surname = surname,
     age = age,

@@ -203,8 +203,9 @@ private fun ImagePickerColumn(
     onGalleryOptionClick: () -> Unit
 ) {
     Column {
-        Image(painter = selectedImage?.let { BitmapPainter(it) }
-            ?: painterResource(R.drawable.ic_add_photo),
+        Image(
+            painter = selectedImage?.let { BitmapPainter(it) }
+                ?: painterResource(R.drawable.ic_add_photo),
             contentDescription = null,
             modifier = Modifier
                 .size(dimensionResource(id = R.dimen.size_100))
