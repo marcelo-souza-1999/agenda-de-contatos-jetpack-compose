@@ -29,10 +29,19 @@ object ImageProcessing {
 
     suspend fun correctImageRotation(bitmap: Bitmap): Bitmap {
         return withContext(Dispatchers.IO) {
+
+            val width = (bitmap.width * SCALE_FACTOR).toInt()
+            val height = (bitmap.height * SCALE_FACTOR).toInt()
+            val reducedBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true)
+
             val matrix = Matrix().apply { postRotate(ROTATION_IMAGE) }
-            Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+            Bitmap.createBitmap(
+                reducedBitmap, 0, 0,
+                reducedBitmap.width, reducedBitmap.height, matrix, false
+            )
         }
     }
 
     private const val ROTATION_IMAGE = 90f
+    private const val SCALE_FACTOR = 0.7f
 }

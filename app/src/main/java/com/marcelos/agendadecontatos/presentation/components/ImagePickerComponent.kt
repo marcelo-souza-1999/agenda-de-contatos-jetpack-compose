@@ -49,7 +49,8 @@ import kotlinx.coroutines.launch
 @Suppress("LongMethod")
 @Composable
 fun ImagePicker(
-    selectedImage: ImageBitmap? = null, onImageSelected: (ImageBitmap?) -> Unit
+    selectedImage: ImageBitmap? = null,
+    onImageSelected: (ImageBitmap?) -> Unit
 ) {
     val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
@@ -109,7 +110,8 @@ fun ImagePicker(
         ) showPermissionDeniedDialog = true
     })
 
-    ImagePickerColumn(selectedImage = selectedImage,
+    ImagePickerColumn(
+        selectedImage = selectedImage,
         expanded = expanded,
         onImageClick = { expanded = true },
         onDismissMenu = { expanded = false },
@@ -203,8 +205,9 @@ private fun ImagePickerColumn(
     onGalleryOptionClick: () -> Unit
 ) {
     Column {
-        Image(painter = selectedImage?.let { BitmapPainter(it) }
-            ?: painterResource(R.drawable.ic_add_photo),
+        Image(
+            painter = selectedImage?.let { BitmapPainter(it) }
+                ?: painterResource(R.drawable.ic_add_photo),
             contentDescription = null,
             modifier = Modifier
                 .size(dimensionResource(id = R.dimen.size_100))
