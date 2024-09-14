@@ -2,7 +2,6 @@ package com.marcelos.agendadecontatos.presentation.ui.screens
 
 import android.content.Context
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +14,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,9 +28,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.marcelos.agendadecontatos.R
 import com.marcelos.agendadecontatos.presentation.components.ErrorDialog
@@ -73,32 +68,6 @@ fun SaveContactScreen(
     val phoneError by viewModel.phoneError.collectAsState()
 
     val scrollState = rememberScrollState()
-
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_PAUSE) {
-                // Quando a atividade entra em pause (por exemplo, ao abrir a câmera)
-                viewModel.updateImage(image)
-                viewModel.updateName(name)
-                viewModel.updateSurname(surname)
-                viewModel.updateAge(age)
-                viewModel.updatePhone(phone)
-
-                Log.d("TesteEstados", "estado do nome: $name")
-            }
-        }
-
-        Log.d("TesteEstados", "estado do nome do view model na ui: " +
-                "${viewModel.name.value}")
-
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
 
     Scaffold(topBar = {
         TopAppBar(
