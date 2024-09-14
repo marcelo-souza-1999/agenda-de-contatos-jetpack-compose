@@ -39,11 +39,11 @@ jobs:
       - name: Detekt Verification
         run: ./gradlew detektAll
 
-      - name: Upload SARIF to GitHub using the upload-sarif action
+      - name: Upload MD to GitHub using the upload-sarif action
         uses: github/codeql-action/upload-sarif@v3
         if: success() || failure()
         with:
-          sarif_file: build/reports/detekt/detekt.sarif
+          sarif_file: build/reports/detekt/detekt.md
           category: lint
 
       - name: Run Unit Tests
