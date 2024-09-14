@@ -3,6 +3,11 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.google.ksp)
+    alias(libs.plugins.detekt)
+}
+
+apply {
+    from("../config/detekt/detekt.gradle")
 }
 
 android {
@@ -31,6 +36,15 @@ android {
             )
         }
     }
+    android.applicationVariants.configureEach {
+        val variantName = name
+
+        kotlin.sourceSets {
+            getByName(variantName) {
+                kotlin.srcDir("build/generated/ksp/$variantName/kotlin")
+            }
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
@@ -41,18 +55,34 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += setOf(
+                "/META-INF/{AL2.0,LGPL2.1,LICENSE.md,LICENSE.txt,LICENSE-notice.md,LICENSE-notice.txt}"
+            )
         }
     }
     testOptions {
         unitTests.all {
             it.allJvmArgs = (it.allJvmArgs + "-Dnet.bytebuddy.experimental=true").toList()
         }
+    }
+}
+
+tasks.register<io.gitlab.arturbosch.detekt.Detekt>("detektAll") {
+    parallel = true
+    buildUponDefaultConfig = true
+    setSource(files(projectDir))
+    config.setFrom(file("$rootDir/config/detekt/detekt.yml"))
+    include("**/*.kt")
+    include("**/*.kts")
+    exclude("**/build/**")
+    reports {
+        xml.required.set(false)
+        html.required.set(true)
+        txt.required.set(true)
+        sarif.required.set(true)
+        sarif.outputLocation.set(file("build/reports/detekt/detekt.sarif"))
     }
 }
 
@@ -67,13 +97,18 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.google.accompanist.system.ui.controller)
+    implementation(libs.bundles.accompanist)
     implementation(libs.androidx.lifecycle.runtime.compose.android)
+    implementation(libs.androidx.exifinterface)
     ksp(libs.room.compiler)
     implementation(libs.bundles.room)
-    ksp(libs.koin.ksp.compiler)
     implementation(libs.bundles.koin)
+    ksp(libs.koin.ksp.compiler)
     implementation(libs.bundles.coroutines)
+    implementation(libs.navigation.compose)
+    implementation(libs.lifecycle.viewmodel)
+    implementation(libs.fancy.compose.alert.dialog)
+    implementation(libs.gson)
 
     testImplementation(libs.junit)
     testImplementation(libs.coroutines.test)
