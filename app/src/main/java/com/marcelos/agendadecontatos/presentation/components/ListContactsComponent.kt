@@ -2,6 +2,7 @@ package com.marcelos.agendadecontatos.presentation.components
 
 import android.content.res.Configuration
 import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,16 +29,21 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.marcelos.agendadecontatos.R
 import com.marcelos.agendadecontatos.domain.model.ContactsViewData
-import com.marcelos.agendadecontatos.presentation.extensions.formattedPhone
 import com.marcelos.agendadecontatos.presentation.theme.ContactsAgendaTheme
 import com.marcelos.agendadecontatos.presentation.theme.TypographyTitle
+import com.marcelos.agendadecontatos.presentation.ui.navigation.Routes
+import com.marcelos.agendadecontatos.utils.formattedPhone
 import java.io.File
 
 @Composable
 fun ListContactsItem(
-    contactsData: ContactsViewData
+    contactsData: ContactsViewData,
+    navController: NavController,
+    onDelete: (Int) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -117,7 +123,11 @@ fun ListContactsItem(
                 iconRes = R.drawable.ic_edit_contact,
                 modifier = Modifier
                     .wrapContentSize()
-                    .clip(CircleShape)
+                    .clickable {
+                        navController.navigate(
+                            route = "${Routes.UpdateContact.route}/${contactsData.id}"
+                        )
+                    }
                     .constrainAs(imgClickUpdate) {
                         start.linkTo(txtPhone.end, margin8)
                         bottom.linkTo(txtPhone.bottom)
@@ -128,7 +138,9 @@ fun ListContactsItem(
                 iconRes = R.drawable.ic_delete_contact,
                 modifier = Modifier
                     .wrapContentSize()
-                    .clip(CircleShape)
+                    .clickable {
+                        contactsData.id?.let { onDelete(it) }
+                    }
                     .constrainAs(imgClickDelete) {
                         start.linkTo(imgClickUpdate.end, margin8)
                         bottom.linkTo(txtPhone.bottom)
@@ -173,8 +185,7 @@ private fun CreateIconButton(
     Image(
         imageVector = ImageVector.vectorResource(iconRes),
         contentDescription = null,
-        modifier = modifier
-            .clickable { /* Handle click */ },
+        modifier = modifier,
         contentScale = ContentScale.Crop
     )
 }
@@ -188,13 +199,17 @@ private fun CreateIconButton(
 internal fun PreviewListContactsItem() {
     ContactsAgendaTheme {
         ListContactsItem(
+            navController = rememberNavController(),
             contactsData = ContactsViewData(
                 name = "Marcelo",
                 surname = "Souza",
                 age = 30,
                 phone = "12996259393",
                 imagePath = null
-            )
+            ),
+            onDelete = {
+                Log.d("DeleteContact", "Ação de deletar contato")
+            }
         )
     }
 }

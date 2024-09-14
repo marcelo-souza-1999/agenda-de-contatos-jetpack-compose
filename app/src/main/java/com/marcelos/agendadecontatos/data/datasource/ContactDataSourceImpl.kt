@@ -17,6 +17,10 @@ class ContactDataSourceImpl(
         it.toContactViewData()
     }
 
+    override suspend fun getContact(contactId: Int) = contactDao.getContactById(contactId).map {
+        it.toContactViewData()
+    }
+
     override suspend fun insertContacts(contacts: ContactsViewData) = contactDao.insertContact(
         contacts.toContactEntity()
     )

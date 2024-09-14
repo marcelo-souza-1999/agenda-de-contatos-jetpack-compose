@@ -1,4 +1,4 @@
-package com.marcelos.agendadecontatos.presentation.extensions
+package com.marcelos.agendadecontatos.utils
 
 private const val ZERO = 0
 private const val MAX_DIGITS = 11

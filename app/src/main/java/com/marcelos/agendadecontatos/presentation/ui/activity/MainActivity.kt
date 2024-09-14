@@ -12,9 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.integerResource
 import androidx.core.view.WindowCompat
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.marcelos.agendadecontatos.R
 import com.marcelos.agendadecontatos.presentation.theme.ContactsAgendaTheme
 import com.marcelos.agendadecontatos.presentation.theme.Purple700
@@ -22,6 +24,7 @@ import com.marcelos.agendadecontatos.presentation.ui.navigation.Routes
 import com.marcelos.agendadecontatos.presentation.ui.screens.SaveContactScreen
 import com.marcelos.agendadecontatos.presentation.ui.screens.ShowContacts
 import com.marcelos.agendadecontatos.presentation.ui.screens.UpdateContactScreen
+import com.marcelos.agendadecontatos.utils.Constants.ID_PARAMETER_NAVIGATE
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,7 +87,12 @@ private fun SetupNavigation() {
         composable(route = Routes.SaveContact.route) {
             SaveContactScreen(navController)
         }
-        composable(route = Routes.UpdateContact.route) {
+        composable(
+            route = "${Routes.UpdateContact.route}/{${ID_PARAMETER_NAVIGATE}}",
+            arguments = listOf(
+                navArgument(ID_PARAMETER_NAVIGATE) { type = NavType.IntType }
+            )
+        ) {
             UpdateContactScreen(navController)
         }
     }

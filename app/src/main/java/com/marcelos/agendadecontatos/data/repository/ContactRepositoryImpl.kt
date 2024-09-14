@@ -12,6 +12,8 @@ class ContactRepositoryImpl(
 
     override suspend fun getContacts() = contactDataSource.getContacts()
 
+    override suspend fun getContact(contactId: Int) = contactDataSource.getContact(contactId)
+
     override suspend fun insertContact(contacts: ContactsViewData) =
         contactDataSource.insertContacts(contacts)
 

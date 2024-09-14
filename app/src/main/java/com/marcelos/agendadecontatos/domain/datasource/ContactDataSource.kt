@@ -7,6 +7,8 @@ interface ContactDataSource {
 
     suspend fun getContacts(): Flow<List<ContactsViewData>>
 
+    suspend fun getContact(contactId: Int): Flow<List<ContactsViewData>>
+
     suspend fun insertContacts(contacts: ContactsViewData)
 
     suspend fun deleteContact(idContact: Int)

@@ -15,7 +15,7 @@ import com.marcelos.agendadecontatos.utils.Constants.TABLE_NAME
 data class ContactEntity(
     @ColumnInfo(name = COLUMN_INFO_ID)
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int? = null,
     @ColumnInfo(name = COLUMN_INFO_IMAGE)
     val imagePath: String?,
     @ColumnInfo(name = COLUMN_INFO_NAME)

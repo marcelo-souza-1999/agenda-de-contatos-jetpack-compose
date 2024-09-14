@@ -4,6 +4,8 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.marcelos.agendadecontatos.domain.model.ContactsViewData
+import com.marcelos.agendadecontatos.domain.usecase.DeleteContactUseCase
+import com.marcelos.agendadecontatos.domain.usecase.GetContactUseCase
 import com.marcelos.agendadecontatos.domain.usecase.GetContactsUseCase
 import com.marcelos.agendadecontatos.domain.usecase.SaveContactUseCase
 import com.marcelos.agendadecontatos.presentation.viewmodel.viewstate.State
@@ -17,8 +19,13 @@ import org.koin.android.annotation.KoinViewModel
 @KoinViewModel
 class ContactsViewModel(
     private val saveContactUseCase: SaveContactUseCase,
-    private val getContactUseCase: GetContactsUseCase
+    private val getContactsUseCase: GetContactsUseCase,
+    private val getContactUseCase: GetContactUseCase,
+    private val deleteContactUseCase: DeleteContactUseCase
 ) : ViewModel() {
+
+    private val _contactId = MutableStateFlow<Int?>(null)
+    val contactId = _contactId.asStateFlow()
 
     private val _image = MutableStateFlow<ImageBitmap?>(null)
     val image = _image.asStateFlow()
@@ -54,8 +61,12 @@ class ContactsViewModel(
     private val _viewStateSaveContact = MutableStateFlow<State<ContactsViewData>>(State.Loading())
     val viewStateSaveContact = _viewStateSaveContact.asStateFlow()
 
+    private val _viewStateDeleteContact =
+        MutableStateFlow<State<Unit>>(State.Loading())
+    val viewStateDeleteContact = _viewStateDeleteContact.asStateFlow()
+
     fun getContacts() = viewModelScope.launch {
-        getContactUseCase().onStart {
+        getContactsUseCase().onStart {
             _viewStateGetContacts.value = State.Loading()
         }.catch { throwable ->
             _viewStateGetContacts.value = State.Error(throwable)
@@ -64,11 +75,45 @@ class ContactsViewModel(
         }
     }
 
+    fun getContact(contactId: Int) = viewModelScope.launch {
+        getContactUseCase(contactId).onStart {
+            _viewStateGetContacts.value = State.Loading()
+        }.catch { throwable ->
+            _viewStateGetContacts.value = State.Error(throwable)
+        }.collect { result ->
+            _viewStateGetContacts.value = result
+        }
+    }
+
+    fun deleteContact(contactId: Int) = viewModelScope.launch {
+        deleteContactUseCase(contactId).onStart {
+            _viewStateDeleteContact.value = State.Loading()
+        }.catch { throwable ->
+            _viewStateDeleteContact.value = State.Error(throwable)
+        }.collect { result ->
+            _viewStateDeleteContact.value = result
+        }
+    }
+
+    fun resetDeleteContactState() {
+        _viewStateDeleteContact.value = State.Loading()
+    }
+
     fun saveContact(
-        imagePath: String?, name: String, surname: String, age: Int, phone: String
+        contactId: Int? = null,
+        imagePath: String?,
+        name: String,
+        surname: String,
+        age: Int,
+        phone: String
     ) = viewModelScope.launch {
         saveContactUseCase(
-            imagePath = imagePath, name = name, surname = surname, age = age, phone = phone
+            id = contactId,
+            imagePath = imagePath,
+            name = name,
+            surname = surname,
+            age = age,
+            phone = phone
         ).onStart {
             _viewStateSaveContact.value = State.Loading()
         }.catch { throwable ->
@@ -76,6 +121,10 @@ class ContactsViewModel(
         }.collect { result ->
             _viewStateSaveContact.value = result
         }
+    }
+
+    fun updateContactId(id: Int?) = viewModelScope.launch {
+        _contactId.value = id
     }
 
     fun updateImage(newImage: ImageBitmap?) = viewModelScope.launch {

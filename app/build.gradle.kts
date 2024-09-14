@@ -107,6 +107,7 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.lifecycle.viewmodel)
     implementation(libs.fancy.compose.alert.dialog)
+    implementation(libs.gson)
 
     testImplementation(libs.junit)
     testImplementation(libs.coroutines.test)

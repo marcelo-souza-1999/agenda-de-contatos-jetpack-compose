@@ -1,45 +1,88 @@
 <resources>
+
+    <!-- Geral -->
     <string name="app_name">Agenda de Contatos</string>
+
+    <!-- Títulos das AppBars -->
     <string name="title_show_contacts_top_app_bar">Agenda de Contatos</string>
     <string name="title_save_contacts_top_app_bar">Salvar novo Contato</string>
     <string name="title_update_contacts_top_app_bar">Atualizar Contato</string>
+
+    <!-- Labels dos campos de entrada -->
     <string name="text_label_name">Nome</string>
     <string name="text_label_surname">Sobrenome</string>
     <string name="text_label_age">Idade</string>
     <string name="text_label_phone">Telefone</string>
+
+    <!-- Botões de ação -->
     <string name="text_btn_save">Salvar</string>
     <string name="text_btn_update">Atualizar</string>
+
+    <!-- Opções de menu relacionadas a imagens -->
     <string name="option_camera_menu">Foto com a câmera</string>
     <string name="option_gallery_menu">Foto da galeria</string>
     <string name="option_camera">Câmera</string>
     <string name="option_gallery">Galeria</string>
     <string name="filter_gallery">image/*</string>
+
+    <!-- Mensagens de permissão -->
     <string name="message_warning_permission_camera">Para o app funcionar corretamente precisamos da permissão para usar a câmera.</string>
     <string name="message_warning_permission_gallery">Para o app funcionar corretamente precisamos da permissão para usar a galeria.</string>
     <string name="message_denied_permission_camera">
         Como a permissão para usar a câmera foi negada.\nPara o app funcionar corretamente,
-    você precisa ativar a permissão manualmente nas configurações do app.
+        você precisa ativar a permissão manualmente nas configurações do app.
     </string>
     <string name="message_denied_permission_gallery">
         Como a permissão para usar a galeria foi negada.\nPara o app funcionar corretamente,
         você precisa ativar a permissão manualmente nas configurações do app.
     </string>
+
+    <!-- Diálogos de permissão -->
     <string name="txt_btn_positive_permission_dialog">Conceder permissão</string>
-    <string name="txt_btn_positive_save_contact_success_dialog">OK</string>
+    <string name="txt_btn_neutral_dialog">OK</string>
     <string name="txt_btn_positive_permission_denied_dialog">Abrir configurações</string>
     <string name="txt_btn_negative_permission_dialog">Cancelar</string>
+
+    <!-- Botões de ação em diálogos de erro e exclusão -->
     <string name="txt_btn_negative_error_dialog">Cancelar</string>
+    <string name="txt_btn_negative_warning_contact_dialog">Cancelar</string>
     <string name="txt_btn_positive_error_dialog">Tentar novamente</string>
+    <string name="txt_btn_positive_warning_contact_dialog">Excluir</string>
+
+    <!-- Títulos de diálogos de permissões e erros -->
     <string name="title_permission_warning_dialog">Permissão necessária</string>
-    <string name="title_save_contact_success_dialog">Contato salvo</string>
-    <string name="title_save_contact_error_dialog">Salvar contato</string>
-    <string name="message_save_contact_success_dialog">Contato foi salvo com sucesso!</string>
-    <string name="message_save_contact_error_dialog">Ocorreu um erro ao tentar salvar o contato!</string>
     <string name="title_permission_denied_dialog">Permissão negada</string>
+    <string name="title_save_contact_success_dialog">Contato salvo</string>
+    <string name="title_update_contact_success_dialog">Contato atualizado</string>
+    <string name="title_delete_contact_success_dialog">Contato excluído</string>
+    <string name="title_save_contact_error_dialog">Salvar contato</string>
+    <string name="title_update_contact_error_dialog">Atualizar contato</string>
+    <string name="title_delete_contact_error_dialog">Excluir contato</string>
+    <string name="title_delete_contact_warning_dialog">Excluindo contato</string>
+    <string name="title_show_contacts_error_dialog">Exibir contatos</string>
+    <string name="title_show_contact_error_dialog">Exibir contato</string>
+
+    <!-- Mensagens de diálogos de sucesso e erro -->
+    <string name="message_save_contact_success_dialog">Contato foi salvo com sucesso!</string>
+    <string name="message_update_contact_success_dialog">Contato foi atualizado com sucesso!</string>
+    <string name="message_delete_contact_success_dialog">Contato foi excluído com sucesso!</string>
+    <string name="message_save_contact_error_dialog">Ocorreu um erro ao tentar salvar o contato!</string>
+    <string name="message_update_contact_error_dialog">Ocorreu um erro ao tentar atualizar o contato!</string>
+    <string name="message_delete_contact_error_dialog">Ocorreu um erro ao tentar excluír o contato!</string>
+    <string name="message_delete_contact_warning_dialog">Tem certeza que deseja excluír esse contato?</string>
+    <string name="message_show_contacts_error_dialog">Ocorreu um erro ao tentar exibir os contatos!</string>
+    <string name="message_show_contact_error_dialog">Ocorreu um erro ao tentar exibir os dados do contato!</string>
+
+    <!-- Filtros e mensagens de erro de validação -->
     <string name="filter_contains_camera">câmera</string>
     <string name="error_message_required_field">Campo obrigatório</string>
+
+    <!-- Formatação de exibição de contatos -->
     <string name="contact_name_format">Nome: %1$s %2$s</string>
     <string name="contact_age_format">Idade: %1$d</string>
     <string name="contact_phone_format">Número: %1$s</string>
+
+    <!-- Mensagem de contato não encontrado -->
     <string name="no_contacts_found">Nenhum contato encontrado</string>
+
 </resources>

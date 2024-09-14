@@ -47,7 +47,7 @@ internal fun PreviewSuccessDialog() {
             message = stringResource(id = R.string.message_save_contact_success_dialog),
             isCancelable = true,
             dialogButtonProperties = DialogButtonProperties(
-                neutralButtonText = R.string.txt_btn_positive_save_contact_success_dialog,
+                neutralButtonText = R.string.txt_btn_neutral_dialog,
                 buttonColor = MaterialTheme.colorScheme.primary,
                 buttonTextColor = White
             ),

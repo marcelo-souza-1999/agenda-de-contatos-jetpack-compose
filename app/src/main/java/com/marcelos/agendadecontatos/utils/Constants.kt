@@ -12,4 +12,5 @@ object Constants {
     const val FILE_PATH_IMAGE_NAME = "contact_image_"
     const val EXTENSION_IMAGE = ".png"
     const val QUALITY_IMAGE = 100
+    const val ID_PARAMETER_NAVIGATE = "contactId"
 }
