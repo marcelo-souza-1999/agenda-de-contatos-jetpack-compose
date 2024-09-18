@@ -46,7 +46,6 @@ import com.marcelos.agendadecontatos.utils.PermissionsHandler.requestPermissionF
 import com.patrik.fancycomposedialogs.properties.DialogButtonProperties
 import kotlinx.coroutines.launch
 
-@Suppress("LongMethod")
 @Composable
 fun ImagePicker(
     selectedImage: ImageBitmap? = null,

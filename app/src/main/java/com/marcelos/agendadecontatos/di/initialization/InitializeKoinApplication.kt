@@ -2,6 +2,8 @@ package com.marcelos.agendadecontatos.di.initialization
 
 import android.app.Application
 import com.marcelos.agendadecontatos.di.modules.DatabaseModule
+import com.marcelos.agendadecontatos.di.modules.RepositoryModule
+import com.marcelos.agendadecontatos.di.modules.UseCaseModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -18,7 +20,9 @@ class InitializeKoinApplication : Application() {
             androidContext(this@InitializeKoinApplication)
             modules(
                 defaultModule,
-                DatabaseModule().module
+                DatabaseModule().module,
+                UseCaseModule().module,
+                RepositoryModule().module
             )
         }
     }
