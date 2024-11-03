@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,6 +48,7 @@ fun ListContactsItem(
 ) {
     Card(
         modifier = Modifier
+            .testTag("cardContact")
             .fillMaxWidth()
             .padding(
                 dimensionResource(R.dimen.size_12)
@@ -72,6 +74,7 @@ fun ListContactsItem(
                 painter = rememberImagePainter(contactsData.imagePath),
                 contentDescription = null,
                 modifier = Modifier
+                    .testTag("imageContact")
                     .clip(CircleShape)
                     .constrainAs(imageContact) {
                         top.linkTo(parent.top, margin20)
@@ -122,6 +125,7 @@ fun ListContactsItem(
             CreateIconButton(
                 iconRes = R.drawable.ic_edit_contact,
                 modifier = Modifier
+                    .testTag("iconEditContact")
                     .wrapContentSize()
                     .clickable {
                         navController.navigate(
@@ -137,6 +141,7 @@ fun ListContactsItem(
             CreateIconButton(
                 iconRes = R.drawable.ic_delete_contact,
                 modifier = Modifier
+                    .testTag("iconDeleteContact")
                     .wrapContentSize()
                     .clickable {
                         contactsData.id?.let { onDelete(it) }

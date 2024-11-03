@@ -56,14 +56,14 @@ class ContactsViewModel(
 
     private val _viewStateGetContacts =
         MutableStateFlow<State<List<ContactsViewData>>>(State.Loading())
-    val viewStateGetContacts = _viewStateGetContacts.asStateFlow()
+    var viewStateGetContacts = _viewStateGetContacts.asStateFlow()
 
     private val _viewStateSaveContact = MutableStateFlow<State<ContactsViewData>>(State.Loading())
     val viewStateSaveContact = _viewStateSaveContact.asStateFlow()
 
     private val _viewStateDeleteContact =
         MutableStateFlow<State<Unit>>(State.Loading())
-    val viewStateDeleteContact = _viewStateDeleteContact.asStateFlow()
+    var viewStateDeleteContact = _viewStateDeleteContact.asStateFlow()
 
     fun getContacts() = viewModelScope.launch {
         getContactsUseCase().onStart {
