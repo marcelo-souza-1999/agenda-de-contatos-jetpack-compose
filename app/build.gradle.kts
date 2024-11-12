@@ -12,7 +12,7 @@ apply {
 
 android {
     namespace = "com.marcelos.agendadecontatos"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.marcelos.agendadecontatos"

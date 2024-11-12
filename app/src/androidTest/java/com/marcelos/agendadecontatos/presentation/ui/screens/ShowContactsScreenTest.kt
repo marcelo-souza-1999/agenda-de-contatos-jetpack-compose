@@ -80,7 +80,7 @@ class ShowContactsScreenTest : KoinTest {
     }
 
     private fun setContent() = composeTestRule.setContent {
-        ShowContacts(
+        ShowContactsScreen(
             navController = rememberNavController(),
             viewModel = viewModel
         )
@@ -144,7 +144,7 @@ class ShowContactsScreenTest : KoinTest {
             }
             NavHost(navController = navController, startDestination = Routes.ShowContacts.route) {
                 composable(Routes.ShowContacts.route) {
-                    ShowContacts(
+                    ShowContactsScreen(
                         navController = navController, viewModel = viewModel
                     )
                 }
@@ -179,7 +179,7 @@ class ShowContactsScreenTest : KoinTest {
             }
             NavHost(navController = navController, startDestination = Routes.ShowContacts.route) {
                 composable(Routes.ShowContacts.route) {
-                    ShowContacts(
+                    ShowContactsScreen(
                         navController = navController, viewModel = viewModel
                     )
                 }

@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -209,6 +210,7 @@ private fun ImagePickerColumn(
                 ?: painterResource(R.drawable.ic_add_photo),
             contentDescription = null,
             modifier = Modifier
+                .testTag("imgButton")
                 .size(dimensionResource(id = R.dimen.size_100))
                 .clip(RectangleShape)
                 .clickable { onImageClick() },

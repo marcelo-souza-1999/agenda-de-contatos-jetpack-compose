@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -215,14 +216,17 @@ private fun ContactFormFields(
         isError = nameError,
         errorMessage = stringResource(R.string.error_message_required_field),
         label = stringResource(R.string.text_label_name),
-        modifier = Modifier.padding(top = dimensionResource(id = R.dimen.size_50))
+        modifier = Modifier
+            .padding(top = dimensionResource(id = R.dimen.size_50))
+            .testTag("inputName")
     )
     FormOutlinedTextField(
         value = surname,
         onValueChange = onSurnameChange,
         isError = surnameError,
         errorMessage = stringResource(R.string.error_message_required_field),
-        label = stringResource(R.string.text_label_surname)
+        label = stringResource(R.string.text_label_surname),
+        modifier = Modifier.testTag("inputSurname")
     )
     FormOutlinedTextField(
         value = age,
@@ -230,7 +234,8 @@ private fun ContactFormFields(
         isError = ageError,
         errorMessage = stringResource(R.string.error_message_required_field),
         label = stringResource(R.string.text_label_age),
-        keyboardType = KeyboardType.Number
+        keyboardType = KeyboardType.Number,
+        modifier = Modifier.testTag("inputAge")
     )
     FormOutlinedTextField(
         value = phone,
@@ -238,7 +243,8 @@ private fun ContactFormFields(
         isError = phoneError,
         errorMessage = stringResource(R.string.error_message_required_field),
         label = stringResource(R.string.text_label_phone),
-        keyboardType = KeyboardType.Phone
+        keyboardType = KeyboardType.Phone,
+        modifier = Modifier.testTag("inputPhone")
     )
 }
 

@@ -43,23 +43,23 @@ class ContactsViewModel(
     val phone = _phone.asStateFlow()
 
     private val _nameError = MutableStateFlow(false)
-    val nameError = _nameError.asStateFlow()
+    var nameError = _nameError.asStateFlow()
 
     private val _surnameError = MutableStateFlow(false)
-    val surnameError = _surnameError.asStateFlow()
+    var surnameError = _surnameError.asStateFlow()
 
     private val _ageError = MutableStateFlow(false)
-    val ageError = _ageError.asStateFlow()
+    var ageError = _ageError.asStateFlow()
 
     private val _phoneError = MutableStateFlow(false)
-    val phoneError = _phoneError.asStateFlow()
+    var phoneError = _phoneError.asStateFlow()
 
     private val _viewStateGetContacts =
         MutableStateFlow<State<List<ContactsViewData>>>(State.Loading())
     var viewStateGetContacts = _viewStateGetContacts.asStateFlow()
 
     private val _viewStateSaveContact = MutableStateFlow<State<ContactsViewData>>(State.Loading())
-    val viewStateSaveContact = _viewStateSaveContact.asStateFlow()
+    var viewStateSaveContact = _viewStateSaveContact.asStateFlow()
 
     private val _viewStateDeleteContact =
         MutableStateFlow<State<Unit>>(State.Loading())
