@@ -31,13 +31,13 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.PopupProperties
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.marcelos.agendadecontatos.R
 import com.marcelos.agendadecontatos.presentation.theme.White
@@ -48,8 +48,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ImagePicker(
-    selectedImage: ImageBitmap? = null,
-    onImageSelected: (ImageBitmap?) -> Unit
+    selectedImage: ImageBitmap? = null, onImageSelected: (ImageBitmap?) -> Unit
 ) {
     val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
@@ -99,8 +98,7 @@ fun ImagePicker(
     }, onDenied = {
         hasPermissionBeenDeniedBefore = true
         if (!ActivityCompat.shouldShowRequestPermissionRationale(
-                context as Activity,
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context as Activity, if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     android.Manifest.permission.READ_MEDIA_IMAGES
                 } else {
                     android.Manifest.permission.READ_EXTERNAL_STORAGE
@@ -109,8 +107,7 @@ fun ImagePicker(
         ) showPermissionDeniedDialog = true
     })
 
-    ImagePickerColumn(
-        selectedImage = selectedImage,
+    ImagePickerColumn(selectedImage = selectedImage,
         expanded = expanded,
         onImageClick = { expanded = true },
         onDismissMenu = { expanded = false },
@@ -204,11 +201,11 @@ private fun ImagePickerColumn(
     onGalleryOptionClick: () -> Unit
 ) {
     Column {
-        Image(
-            painter = selectedImage?.let { BitmapPainter(it) }
-                ?: painterResource(R.drawable.ic_add_photo),
+        Image(painter = selectedImage?.let { BitmapPainter(it) }
+            ?: painterResource(R.drawable.ic_add_photo),
             contentDescription = null,
             modifier = Modifier
+                .testTag("imgButton")
                 .size(dimensionResource(id = R.dimen.size_100))
                 .clip(RectangleShape)
                 .clickable { onImageClick() },
@@ -259,7 +256,7 @@ private fun Context.openScreenAppSettings() {
     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
         data = Uri.parse("package:$packageName")
     }
-    ContextCompat.startActivity(this, intent, null)
+    this.startActivity(intent)
 }
 
 @Preview(showBackground = true, showSystemUi = false)

@@ -46,7 +46,7 @@ import com.patrik.fancycomposedialogs.properties.DialogButtonProperties
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun ShowContacts(
+fun ShowContactsScreen(
     navController: NavController,
     viewModel: ContactsViewModel = koinViewModel()
 ) {

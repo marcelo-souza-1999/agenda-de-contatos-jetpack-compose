@@ -12,7 +12,7 @@ apply {
 
 android {
     namespace = "com.marcelos.agendadecontatos"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.marcelos.agendadecontatos"
@@ -34,6 +34,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+
+        debug {
+            enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
         }
     }
     android.applicationVariants.configureEach {
@@ -87,7 +92,6 @@ tasks.register<io.gitlab.arturbosch.detekt.Detekt>("detektAll") {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

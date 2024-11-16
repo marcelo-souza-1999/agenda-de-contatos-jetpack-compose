@@ -22,7 +22,7 @@ import com.marcelos.agendadecontatos.presentation.theme.ContactsAgendaTheme
 import com.marcelos.agendadecontatos.presentation.theme.Purple700
 import com.marcelos.agendadecontatos.presentation.ui.navigation.Routes
 import com.marcelos.agendadecontatos.presentation.ui.screens.SaveContactScreen
-import com.marcelos.agendadecontatos.presentation.ui.screens.ShowContacts
+import com.marcelos.agendadecontatos.presentation.ui.screens.ShowContactsScreen
 import com.marcelos.agendadecontatos.presentation.ui.screens.UpdateContactScreen
 import com.marcelos.agendadecontatos.utils.Constants.ID_PARAMETER_NAVIGATE
 
@@ -82,7 +82,7 @@ private fun SetupNavigation() {
         }
     ) {
         composable(route = Routes.ShowContacts.route) {
-            ShowContacts(navController)
+            ShowContactsScreen(navController)
         }
         composable(route = Routes.SaveContact.route) {
             SaveContactScreen(navController)
