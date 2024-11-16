@@ -60,7 +60,10 @@ Compose**, explorando seus recursos avançados.
 <details>
 <summary>📽️ Clique para visualizar o vídeo</summary>
 
-![Demonstração do App](/media/demonstração.mp4)
+<video controls>
+  <source src="/media/demonstracao.mp4" type="video/mp4">
+  Seu navegador não suporta a exibição de vídeos.
+</video>
 
 </details>
 ```
