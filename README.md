@@ -56,17 +56,13 @@ Compose**, explorando seus recursos avançados.
 
 ## 📸 Funcionalidades em Vídeo
 
-```
 <details>
 <summary>📽️ Clique para visualizar o vídeo</summary>
 
-<video controls>
-  <source src="/media/demonstracao.mp4" type="video/mp4">
-  Seu navegador não suporta a exibição de vídeos.
-</video>
+https://github.com/user-attachments/assets/9c9c07ee-101e-4f1e-90d1-9691620b2620
 
 </details>
-```
+
 ---
 
 ## 📫 Contribuindo
