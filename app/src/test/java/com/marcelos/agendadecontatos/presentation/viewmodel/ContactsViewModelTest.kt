@@ -208,7 +208,7 @@ class ContactsViewModelTest {
         }
 
     @Test
-    fun `when updateName is called with a non-empty name, name state should be updated and nameError should be false`() =
+    fun `when updateName is called with a non-empty name and nameError should be false`() =
         runTest {
             // Act
             viewModel.updateName("Marcelo")
@@ -219,7 +219,7 @@ class ContactsViewModelTest {
         }
 
     @Test
-    fun `when updateSurname is called with a non-empty surname, surname state should be updated and surnameError should be false`() =
+    fun `when updateSurname is called with a non-empty surname and surnameError should be false`() =
         runTest {
             // Act
             viewModel.updateSurname("Souza")
@@ -243,7 +243,7 @@ class ContactsViewModelTest {
 
 
     @Test
-    fun `when updatePhone is called with a non-empty phone, phone state should be updated and phoneError should be false`() =
+    fun `when updatePhone is called with a non-empty phone and phoneError should be false`() =
         runTest {
             // Act
             viewModel.updatePhone("12996259393")

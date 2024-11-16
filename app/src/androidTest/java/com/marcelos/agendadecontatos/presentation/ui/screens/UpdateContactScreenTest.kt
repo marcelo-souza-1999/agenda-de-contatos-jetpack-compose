@@ -33,12 +33,12 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 
 @RunWith(AndroidJUnit4::class)
-class SaveContactScreenTest : KoinTest {
+class UpdateContactScreenTest : KoinTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private lateinit var saveContactFlow: MutableStateFlow<State<ContactsViewData>>
+    private lateinit var updateContactFlow: MutableStateFlow<State<ContactsViewData>>
     private lateinit var nameErrorFlow: MutableStateFlow<Boolean>
     private lateinit var surnameErrorFlow: MutableStateFlow<Boolean>
     private lateinit var ageErrorFlow: MutableStateFlow<Boolean>
@@ -58,7 +58,7 @@ class SaveContactScreenTest : KoinTest {
 
     @Before
     fun setup() {
-        saveContactFlow = MutableStateFlow(State.Loading())
+        updateContactFlow = MutableStateFlow(State.Loading())
         nameErrorFlow = MutableStateFlow(false)
         surnameErrorFlow = MutableStateFlow(false)
         ageErrorFlow = MutableStateFlow(false)
@@ -70,7 +70,7 @@ class SaveContactScreenTest : KoinTest {
             getContactUseCase,
             deleteContactUseCase
         ).apply {
-            viewStateSaveContact = saveContactFlow
+            viewStateSaveContact = updateContactFlow
             nameError = nameErrorFlow
             surnameError = surnameErrorFlow
             ageError = ageErrorFlow
@@ -87,29 +87,29 @@ class SaveContactScreenTest : KoinTest {
     }
 
     private fun setContent() = composeTestRule.setContent {
-        SaveContactScreen(navController = rememberNavController(), viewModel = viewModel)
+        UpdateContactScreen(navController = rememberNavController(), viewModel = viewModel)
     }
 
     @Test
     fun checkTopBarTitleIsCorrect() {
         setContent()
 
-        composeTestRule.onNodeWithText("Salvar novo Contato").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Atualizar Contato").assertIsDisplayed()
     }
 
     @Test
-    fun testSaveContactDisplaySuccessDialog() {
-        saveContactFlow.value = State.Success(sampleContactsData)
+    fun testUpdateContactDisplaySuccessDialog() {
+        updateContactFlow.value = State.Success(sampleContactsData)
         setContent()
 
-        composeTestRule.onNodeWithText("Contato salvo").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Contato atualizado").assertIsDisplayed()
     }
 
     @Test
-    fun testSaveContactDisplaySuccessDialogNavigateOnOkClick() {
+    fun testUpdateContactDisplaySuccessDialogNavigateOnOkClick() {
         var navigatedRoute: String? = null
 
-        saveContactFlow.value = State.Success(sampleContactsData)
+        updateContactFlow.value = State.Success(sampleContactsData)
 
         composeTestRule.setContent {
             val navController = rememberNavController().apply {
@@ -117,9 +117,9 @@ class SaveContactScreenTest : KoinTest {
                     navigatedRoute = destination.route
                 }
             }
-            NavHost(navController = navController, startDestination = Routes.SaveContact.route) {
-                composable(Routes.SaveContact.route) {
-                    SaveContactScreen(
+            NavHost(navController = navController, startDestination = Routes.UpdateContact.route) {
+                composable(Routes.UpdateContact.route) {
+                    UpdateContactScreen(
                         navController = navController,
                         viewModel = viewModel
                     )
@@ -141,17 +141,17 @@ class SaveContactScreenTest : KoinTest {
     }
 
     @Test
-    fun testSaveContactDisplayErrorDialog() {
-        saveContactFlow.value = State.Error(Throwable("Erro ao salvar contato"))
+    fun testUpdateContactDisplayErrorDialog() {
+        updateContactFlow.value = State.Error(Throwable("Erro ao atualizar contato"))
         setContent()
 
-        composeTestRule.onNodeWithText("Ocorreu um erro ao tentar salvar o contato!")
+        composeTestRule.onNodeWithText("Ocorreu um erro ao tentar atualizar o contato!")
             .assertIsDisplayed()
     }
 
     @Test
-    fun testSaveContactDisplaysErrorDialogAndRetryOnFailure() {
-        saveContactFlow.value = State.Error(Throwable("Erro ao salvar contato"))
+    fun testUpdateContactDisplaysErrorDialogAndRetryOnFailure() {
+        updateContactFlow.value = State.Error(Throwable("Erro ao atualizar contato"))
         setContent()
 
         composeTestRule.onNodeWithTag("inputName").performTextInput(sampleContactsData.name)
@@ -160,13 +160,13 @@ class SaveContactScreenTest : KoinTest {
             .performTextInput(sampleContactsData.age.toString())
         composeTestRule.onNodeWithTag("inputPhone").performTextInput(sampleContactsData.phone)
 
-        composeTestRule.onNodeWithText("Salvar contato").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Atualizar contato").assertIsDisplayed()
 
         composeTestRule.onNodeWithText("Tentar novamente").performClick()
 
-        saveContactFlow.value = State.Error(Throwable("Erro ao salvar contato"))
+        updateContactFlow.value = State.Error(Throwable("Erro ao atualizar contato"))
 
-        composeTestRule.onNodeWithText("Ocorreu um erro ao tentar salvar o contato!")
+        composeTestRule.onNodeWithText("Ocorreu um erro ao tentar atualizar o contato!")
             .assertIsDisplayed()
     }
 
@@ -178,7 +178,7 @@ class SaveContactScreenTest : KoinTest {
         phoneErrorFlow.value = false
         setContent()
 
-        composeTestRule.onNodeWithText("Salvar").performClick()
+        composeTestRule.onNodeWithText("Atualizar").performClick()
 
         nameErrorFlow.value = true
         surnameErrorFlow.value = true
