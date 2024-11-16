@@ -37,7 +37,7 @@ Compose**, explorando seus recursos avançados.
 - Interface moderna e responsiva utilizando o Jetpack Compose.
 - Navegação fluida entre telas usando Nav Host.
 - Persistência de dados confiável com Room Database.
-- Arquitetura baseada em Injeção de Dependências com Koin Annotations.
+- Arquitetura baseada em MVVM e com Injeção de Dependências usando Koin Annotations.
 - Compatível com Kotlin 2.0.20 e JDK 21.
 
 ---
