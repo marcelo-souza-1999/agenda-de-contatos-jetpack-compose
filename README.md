@@ -2,8 +2,8 @@
 
 > Este aplicativo foi desenvolvido com o objetivo de aprimorar meus conhecimentos em **Jetpack
 Compose**, explorando seus recursos avançados.  
-> A aplicação é uma agenda de contatos, onde o usuário pode salvar o **nome**, **número de telefone
-**, **idade** e uma **foto** para cada contato.  
+> A aplicação é uma agenda de contatos, onde o usuário pode salvar o **nome**, **número de telefone**,
+> **idade** e uma **foto** para cada contato.  
 > Além disso, o projeto utiliza os benefícios do Jetpack Compose para criar interfaces modernas, com
 > componentes reutilizáveis, navegação fluida e animações de forma simples.
 
